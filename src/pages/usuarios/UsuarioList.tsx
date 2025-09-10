@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import type { Usuario } from '../../interfaces/usuario/usuario.interface'
 import { usuarioService } from '../../services/usuarioService'
 import LoadingData from '../../components/LoadingData'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '../../../routes'
 
 function UsuariosList() {
 
@@ -26,7 +28,7 @@ function UsuariosList() {
         <div className='card'>
           <div className="card-header d-flex justify-content-between align-items-center">
             <span>Listagem de usuários</span>  
-            <button className='btn btn-sm btn-primary'>Novo</button>
+            <Link className="btn btn-sm btn-primary" to={ROUTES.USUARIO.CREATE}>Novo</Link>
           </div>
           <div className="card-body">
             <table className="table table-striped">
@@ -49,7 +51,7 @@ function UsuariosList() {
                     <td>
                       <div className='d-flex gap-2 justify-content-center'>
                         <button className='btn btn-sm btn-info'>Ver</button>
-                        <button className='btn btn-sm btn-warning'>Editar</button>
+                        <Link to={ROUTES.USUARIO.EDIT.replace(':id', '1')} className='btn btn-sm btn-warning'>Editar</Link>
                         <button className='btn btn-sm btn-danger'>Deletar</button>
                       </div>
                     </td>
