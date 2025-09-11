@@ -51,7 +51,7 @@ function UsuariosList() {
                     <td>
                       <div className='d-flex gap-2 justify-content-center'>
                         <button className='btn btn-sm btn-info'>Ver</button>
-                        <Link to={ROUTES.USUARIO.EDIT.replace(':id', '1')} className='btn btn-sm btn-warning'>Editar</Link>
+                        <Link to={ROUTES.USUARIO.EDIT.replace(':id', String(usuario.id))} className='btn btn-sm btn-warning'>Editar</Link>
                         <button className='btn btn-sm btn-danger'>Deletar</button>
                       </div>
                     </td>

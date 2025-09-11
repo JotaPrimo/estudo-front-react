@@ -14,21 +14,19 @@ import { userValidations } from './user.validations';
 
 function UsuariosCreate() {
   const navigate = useNavigate()
+  const [perfis, setPerfis] = useState<PerfilResponseDTO[] | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty }
-  } = useForm<UsuarioCreateDTO>({mode: "onChange"});
-
-  const [perfis, setPerfis] = useState<PerfilResponseDTO[] | null>(null);
+  } = useForm<UsuarioCreateDTO>({mode: "onChange"});  
 
   useEffect(() => {
     buscarPerfis();
   }, [])
 
   const onSubmit: SubmitHandler<UsuarioCreateDTO> = async (data) => {
-
     const usuarioCreate: UsuarioCreateDTO = {
       email: data.email,
       nome: data.nome,
