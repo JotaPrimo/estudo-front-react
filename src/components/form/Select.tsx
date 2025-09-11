@@ -11,7 +11,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
        <div className="d-md-colmun col-md-6 col-lg-4 mb-3">
         <label htmlFor={props.id} className="form-label float-start">{label}</label>
-        <select ref={ref} {...props} className="form-control border p-2 rounded">
+        <select ref={ref} {...props} className={`form-control ${error ? "border-danger" : ""}`}>
           <option value="">Selecione...</option>
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -19,7 +19,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </option>
           ))}
         </select>
-        {error && <span className="text-red-500 text-sm">{error}</span>}
+        {error && <span className="text-danger text-sm float-start">{error}</span>}
       </div>
     );
   }

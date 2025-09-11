@@ -4,46 +4,94 @@ import type { UsuarioCreateDTO } from '../../interfaces/usuario/usuarioCreate.dt
 import { usuarioService } from '../../services/usuarioService';
 import Select from '../../components/form/Select';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { perfilService } from '../../services/perfilService';
+import { useEffect, useState } from 'react';
+import type { PerfilResponseDTO } from '../../interfaces/perfil/perfilResponse.dto';
+import LoadingData from '../../components/LoadingData';
+import { userValidations } from './user.validations';
 
 
 function UsuariosCreate() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm<UsuarioCreateDTO>();
+    formState: { errors, isValid, isDirty }
+  } = useForm<UsuarioCreateDTO>({mode: "onChange"});
 
-  const options = [
-    { value: "1", label: "Administrador" },
-    { value: "2", label: "Usuário" },
-    { value: "3", label: "Convidado" },
-  ]
+  const [perfis, setPerfis] = useState<PerfilResponseDTO[] | null>(null);
+
+  useEffect(() => {
+    buscarPerfis();
+  }, [])
 
   const onSubmit: SubmitHandler<UsuarioCreateDTO> = async (data) => {
-    console.log("onSubmit", data.perfil);
-    
+
     const usuarioCreate: UsuarioCreateDTO = {
       email: data.email,
       nome: data.nome,
       perfil: { id: String(data.perfil) },
     };
-
-    console.log("usuarioCreate", usuarioCreate);
-    usuarioService.criar(usuarioCreate)
-      .then(() => toast.success('Usuário criado com sucesso'))
-      .catch((erro) => console.log(erro));
+    salvarUsuario(usuarioCreate);
   };
 
+  function salvarUsuario(usuario: UsuarioCreateDTO) {
+    usuarioService.criar(usuario)
+      .then(() => {
+        toast.success('Usuário criado com sucesso');
+        navigate('/usuarios')
+      }).catch(() => toast.error('Ocoorreu um erro!'));
+  }
+
+  async function buscarPerfis() {
+    const allPerfis = await perfilService.listar();
+    setPerfis(allPerfis)
+  }
+
+  function mapDePerfisParaOptions() {
+    if (perfis !== null) {
+      return perfis.map(p => ({
+        value: p.id.toString(),
+        label: p.cargo
+      }))
+    }
+    return [];
+  }
+
+  if (perfis == null) {
+    return <LoadingData />
+  }
+
   return (
-    <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+    <form  onSubmit={handleSubmit((data) => onSubmit(data))}>
       <div className="row">
-        <Input label='Nome' id='nome' placeholder='Informe o nome' {...register('nome')} />
-        <Input label='Email' id='email' placeholder='Informe o email' {...register('email')} />
-        <Select label='Perfil' id='perfil' error={errors.perfil?.message as string} options={options} {...register('perfil')} />
+        <Input 
+          label='Nome' 
+          id='nome' 
+          error={errors.nome?.message as string}
+          placeholder='Informe o nome' 
+          {...register('nome', userValidations.nome)} 
+        />
+        <Input 
+          label='Email' 
+          id='email' 
+          error={errors.email?.message as string}
+          placeholder='Informe o email' 
+          {...register('email', userValidations.email )} 
+        />
+        <Select 
+          label='Perfil' 
+          id='perfil' 
+          error={errors.perfil?.message as string} 
+          options={mapDePerfisParaOptions()} 
+            {...register('perfil', userValidations.perfil)} 
+        />
       </div>
       <div className='w-100 d-flex gap-2'>
         <button className='btn btn-secondary'>Voltar</button>
-        <button className='btn btn-primary' type='submit'>Salvar</button>
+        <button className='btn btn-primary' disabled={!isDirty || !isValid} type='submit'>Salvar</button>
       </div>
     </form>
   )
