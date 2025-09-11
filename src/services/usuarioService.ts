@@ -1,5 +1,6 @@
 import api from './api';
 import type { Usuario } from '../interfaces/usuario/usuario.interface';
+import type { UsuarioCreateDTO } from '../interfaces/usuario/usuarioCreate.dto';
 
 export const usuarioService = {
   listar: async (): Promise<Usuario[]> => {
@@ -12,7 +13,7 @@ export const usuarioService = {
     return response.data;
   },
 
-  criar: async (usuario: Usuario): Promise<Usuario> => {
+  criar: async (usuario: UsuarioCreateDTO): Promise<Usuario> => {
     const response = await api.post<Usuario>(`/usuarios`, usuario);
     return response.data;
   },
