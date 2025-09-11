@@ -27,22 +27,18 @@ const UsuarioEdit = () => {
 
   useEffect(() => {
     carregarUsuario()
-
-    
-    resetForm();    
   }, [])
 
-  async function resetForm() {
-    if (usuario) {     
-      console.log("ASDASDASD");
-       
+  useEffect(() => {
+    if (usuario) {
       reset({
         perfil: { id: usuario.perfil.id },
         nome: usuario.nome,
         email: usuario.email,
-      })
+      });
     }
-  }
+  }, [usuario]);
+
 
   async function carregarUsuario() {
     if (id) {
