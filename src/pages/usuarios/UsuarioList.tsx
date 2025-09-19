@@ -47,7 +47,7 @@ function UsuariosList() {
                     <th scope="row">{usuario.id}</th>
                     <td>{usuario.nome}</td>
                     <td>{usuario.email}</td>
-                    <td>{usuario.perfil.cargo}</td>
+                    <td>{usuario?.perfil?.cargo}</td>
                     <td>
                       <div className='d-flex gap-2 justify-content-center'>
                         <button className='btn btn-sm btn-info'>Ver</button>

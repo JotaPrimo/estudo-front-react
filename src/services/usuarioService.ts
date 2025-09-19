@@ -1,6 +1,8 @@
 import api from './api';
 import type { Usuario } from '../interfaces/usuario/usuario.interface';
 import type { UsuarioCreateDTO } from '../interfaces/usuario/usuarioCreate.dto';
+import type { UsuarioEditDTO } from '../interfaces/usuario/usuarioEdit.dto';
+import type { UsuarioResponseDTO } from '../interfaces/usuario/usuarioResponseDTO';
 
 export const usuarioService = {
   listar: async (): Promise<Usuario[]> => {
@@ -18,8 +20,9 @@ export const usuarioService = {
     return response.data;
   },
 
-  atualizar: async (id: string, usuario: Usuario): Promise<Usuario> => {
-    const response = await api.put<Usuario>(`/usuarios/${id}`, usuario);
+  atualizar: async (usuario: UsuarioEditDTO): Promise<UsuarioResponseDTO> => {
+    console.log("atualizar data:", usuario);
+    const response = await api.put<UsuarioResponseDTO>(`/usuarios/${usuario.id}`, usuario);
     return response.data;
   },
 

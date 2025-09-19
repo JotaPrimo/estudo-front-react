@@ -1,13 +1,10 @@
+import type { PerfilDTO } from "../perfil/PerfilDTO";
+
 export interface UsuarioResponseDTO {
   id?: number;
   nome: string;
   email: string;
-  perfil?: {
-    id: number;
-    cargo: string;
-    departamento: string;
-    ativo: boolean;
-  };
+  perfil: PerfilDTO;
   postagens?: {
     id: number;
     titulo: string;

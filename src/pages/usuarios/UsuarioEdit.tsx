@@ -7,14 +7,16 @@ import Input from '../../components/form/Input';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { UsuarioEditDTO } from '../../interfaces/usuario/usuarioEdit.dto';
 import { userValidations } from './user.validations';
-import Select from '../../components/form/Select';
 import type { PerfilResponseDTO } from '../../interfaces/perfil/perfilResponse.dto';
+import Select from 'react-select'
+import { perfilService } from '../../services/perfilService';
+
 
 const UsuarioEdit = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>();
   const [usuario, setUsuario] = useState<UsuarioEditDTO | null>(null)
-  const [perfis, setPerfis] = useState<PerfilResponseDTO[] | null>(null);
+  const [perfis, setPerfis] = useState<{ label: string, value: string }[] | null>(null);
 
   const {
     register,
@@ -27,6 +29,7 @@ const UsuarioEdit = () => {
 
   useEffect(() => {
     carregarUsuario()
+    carregarPerfis()
   }, [])
 
   useEffect(() => {
@@ -47,7 +50,12 @@ const UsuarioEdit = () => {
     }
   }
 
-  function mapDePerfisParaOptions() {
+  async function carregarPerfis() {
+    const perfis = await perfilService.listar();
+    setPerfis(mapDePerfisParaOptions(perfis))
+  }
+
+  function mapDePerfisParaOptions(perfis: PerfilResponseDTO[]) {
     if (perfis !== null) {
       return perfis.map(p => ({
         value: p.id.toString(),
@@ -57,20 +65,20 @@ const UsuarioEdit = () => {
     return [];
   }
 
-  const onSubmit: SubmitHandler<UsuarioEditDTO> = async (data) => {
-    const usuarioEditDTO: UsuarioEditDTO = {
-      id: usuario?.id ?? 0,
-      email: data.email,
+  const onSubmit: SubmitHandler<UsuarioEditDTO> = async (data) => {   
+    usuarioService.atualizar({
+      id: String(id),
       nome: data.nome,
-      perfil: { id: String(data.perfil) },
-    };
-    salvarUsuario(usuarioEditDTO);
+      email: data.email,
+      perfil: { id: data.perfil.id, cargo: data.perfil.cargo },
+      postagens: []
+    }).then((response) => {
+      console.log("response", response);
+    }).catch((error) => {
+      console.log("errors", error);
+    });
   };
 
-  async function salvarUsuario(usuarioEdit: UsuarioEditDTO) {
-    console.log("salvar usuario");
-
-  }
 
   if (usuario == null) <LoadingData />
 
@@ -96,17 +104,20 @@ const UsuarioEdit = () => {
                   placeholder='Informe o email'
                   {...register('email', userValidations.email)}
                 />
-                <Select
-                  label='Perfil'
-                  id='perfil'
-                  error={errors.perfil?.message as string}
-                  options={mapDePerfisParaOptions()}
-                  {...register('perfil', userValidations.perfil)}
-                />
+                <div className='col col-md-4 col-md-6 mt-5'>
+                  <div className='d-flex flex-column align-align-items-start'>
+                    <label htmlFor="perfil" className=''>perfil</label>
+                    <Select
+                      options={perfis ?? []}
+                      id='perfil'
+                      className='w-100'
+                      defaultValue={{ label: usuario?.perfil.cargo, value: usuario?.perfil.id }} />
+                  </div>
+                </div>
               </div>
-              <div className='w-100 d-flex gap-2'>
+              <div className='w-100 d-flex gap-2 mt-5'>
                 <button className='btn btn-secondary'>Voltar</button>
-                <button className='btn btn-primary' disabled={!isDirty || !isValid} type='submit'>Salvar</button>
+                <button className='btn btn-primary' disabled={!isValid} type='submit'>Salvar</button>
               </div>
             </form>
           </div>

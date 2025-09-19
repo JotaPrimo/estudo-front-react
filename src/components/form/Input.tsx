@@ -9,7 +9,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, id, error, ...props }, ref) => {
     return (
-      <div className="d-md-colmun col-md-6 col-lg-4 mb-3">
+      <div className="col col-md-4 col-md-6">
         <label htmlFor={id} className="form-label float-start">{label}</label>
         <input ref={ref} {...props} id={id} className={`form-control border p-2 rounded ${error ? "border-danger" : ""}`} />            
         {error && <span className="text-danger text-sm float-start">{error}</span>}
