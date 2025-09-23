@@ -26,7 +26,7 @@ export const usuarioService = {
     return response.data;
   },
 
-  deletar: async (id: string): Promise<void> => {
+  deletar: async (id: number): Promise<void> => {
     await api.delete(`/usuarios/${id}`);
   },
 };

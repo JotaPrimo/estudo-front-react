@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import type { PerfilResponseDTO } from '../../interfaces/perfil/perfilResponse.dto';
 import LoadingData from '../../components/LoadingData';
 import { userValidations } from './user.validations';
+import { alertService } from '../../services/alertService';
 
 
 function UsuariosCreate() {
@@ -38,7 +39,7 @@ function UsuariosCreate() {
   function salvarUsuario(usuario: UsuarioCreateDTO) {
     usuarioService.criar(usuario)
       .then(() => {
-        toast.success('Usuário criado com sucesso');
+        alertService.success("Usuário cadastrado com sucesso");
         navigate('/usuarios')
       }).catch(() => toast.error('Ocoorreu um erro!'));
   }

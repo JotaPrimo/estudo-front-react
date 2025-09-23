@@ -4,6 +4,8 @@ import { usuarioService } from '../../services/usuarioService'
 import LoadingData from '../../components/LoadingData'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../../routes'
+import { confirmDelete } from '../../services/confirmService';
+import { alertService } from '../../services/alertService'
 
 function UsuariosList() {
 
@@ -15,7 +17,22 @@ function UsuariosList() {
 
   async function carregarUsuarios() {
     const data = await usuarioService.listar();
+    console.log(`carregarUsuarios ${data}`);
+    
     setUsuarios(data)
+  }
+
+  function deletar(usuario: Usuario) {
+   alertService.confirm(`Deletar usuário ${usuario.nome}`, 'Deletar', 'Cancelar')
+      .then((res) => {
+        if (res.isConfirmed) {
+          usuarioService.deletar(usuario.id)          
+          alertService.success("Registro deletado com sucesso");
+          carregarUsuarios();
+        } else {
+          alertService.info('Operação cancelada');
+        }
+      });
   }
 
   if (!usuarios) {
@@ -27,7 +44,7 @@ function UsuariosList() {
       {usuarios && (
         <div className='card'>
           <div className="card-header d-flex justify-content-between align-items-center">
-            <span>Listagem de usuários</span>  
+            <span>Listagem de usuários</span>
             <Link className="btn btn-sm btn-primary" to={ROUTES.USUARIO.CREATE}>Novo</Link>
           </div>
           <div className="card-body">
@@ -52,14 +69,18 @@ function UsuariosList() {
                       <div className='d-flex gap-2 justify-content-center'>
                         <button className='btn btn-sm btn-info'>Ver</button>
                         <Link to={ROUTES.USUARIO.EDIT.replace(':id', String(usuario.id))} className='btn btn-sm btn-warning'>Editar</Link>
-                        <button className='btn btn-sm btn-danger'>Deletar</button>
+                        <button
+                          onClick={() => deletar(usuario)}
+                          className='btn btn-sm btn-danger'>
+                          Deletar
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>          
+          </div>
         </div>
       )}
     </div>
