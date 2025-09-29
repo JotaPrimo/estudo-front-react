@@ -5,10 +5,11 @@ export const alertService = {
     title: string = 'Atenção',
     confirmButtonText: string = 'Deletar',
     denyButtonText: string = 'Cancelar',
+    showDenyButton: boolean = false
   ) => {
     return Swal.fire({
       title: title,
-      showDenyButton: true,
+      showDenyButton: showDenyButton,
       showCancelButton: true,
       confirmButtonText: confirmButtonText,
       denyButtonText: denyButtonText,

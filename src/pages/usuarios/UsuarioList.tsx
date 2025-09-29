@@ -4,7 +4,6 @@ import { usuarioService } from '../../services/usuarioService'
 import LoadingData from '../../components/LoadingData'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../../routes'
-import { confirmDelete } from '../../services/confirmService';
 import { alertService } from '../../services/alertService'
 
 function UsuariosList() {
@@ -17,22 +16,21 @@ function UsuariosList() {
 
   async function carregarUsuarios() {
     const data = await usuarioService.listar();
-    console.log(`carregarUsuarios ${data}`);
-    
     setUsuarios(data)
   }
 
-  function deletar(usuario: Usuario) {
-   alertService.confirm(`Deletar usuário ${usuario.nome}`, 'Deletar', 'Cancelar')
-      .then((res) => {
-        if (res.isConfirmed) {
-          usuarioService.deletar(usuario.id)          
-          alertService.success("Registro deletado com sucesso");
-          carregarUsuarios();
-        } else {
-          alertService.info('Operação cancelada');
-        }
-      });
+  async function deletar(usuario: Usuario) {
+    const res = await alertService.confirm(`Deletar usuário ${usuario.nome}`, 'Deletar', 'Cancelar');
+
+
+    if (res.isConfirmed) {
+      await usuarioService.deletar(usuario.id)
+      alertService.success("Registro deletado com sucesso");
+      await carregarUsuarios();
+    } else {
+      alertService.info('Operação cancelada');
+    }
+
   }
 
   if (!usuarios) {

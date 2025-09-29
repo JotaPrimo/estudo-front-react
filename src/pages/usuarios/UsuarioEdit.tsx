@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import type { Usuario } from '../../interfaces/usuario/usuario.interface'
 import LoadingData from '../../components/LoadingData'
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
 import Input from '../../components/form/Input';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -116,7 +116,7 @@ const UsuarioEdit = () => {
                 </div>
               </div>
               <div className='w-100 d-flex gap-2 mt-5'>
-                <button className='btn btn-secondary'>Voltar</button>
+                <Link to={'/usuarios'} className='btn btn-secondary'>Voltar</Link>
                 <button className='btn btn-primary' disabled={!isValid} type='submit'>Salvar</button>
               </div>
             </form>
