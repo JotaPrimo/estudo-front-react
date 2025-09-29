@@ -65,7 +65,7 @@ function UsuariosList() {
                     <td>{usuario?.perfil?.cargo}</td>
                     <td>
                       <div className='d-flex gap-2 justify-content-center'>
-                        <button className='btn btn-sm btn-info'>Ver</button>
+                        <Link to={ROUTES.USUARIO.VIEW.replace(':idUsuario', String(usuario.id))} className='btn btn-sm btn-info'>Ver</Link>
                         <Link to={ROUTES.USUARIO.EDIT.replace(':id', String(usuario.id))} className='btn btn-sm btn-warning'>Editar</Link>
                         <button
                           onClick={() => deletar(usuario)}

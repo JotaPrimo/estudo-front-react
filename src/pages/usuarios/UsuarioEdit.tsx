@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import type { Usuario } from '../../interfaces/usuario/usuario.interface'
 import LoadingData from '../../components/LoadingData'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
 import Input from '../../components/form/Input';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -10,10 +9,10 @@ import { userValidations } from './user.validations';
 import type { PerfilResponseDTO } from '../../interfaces/perfil/perfilResponse.dto';
 import Select from 'react-select'
 import { perfilService } from '../../services/perfilService';
+import { ROUTES } from '../../../routes';
 
 
-const UsuarioEdit = () => {
-  const navigate = useNavigate()
+const UsuarioEdit = () => {  
   const { id } = useParams<{ id: string }>();
   const [usuario, setUsuario] = useState<UsuarioEditDTO | null>(null)
   const [perfis, setPerfis] = useState<{ label: string, value: string }[] | null>(null);
@@ -116,7 +115,7 @@ const UsuarioEdit = () => {
                 </div>
               </div>
               <div className='w-100 d-flex gap-2 mt-5'>
-                <Link to={'/usuarios'} className='btn btn-secondary'>Voltar</Link>
+                <Link to={ROUTES.USUARIO.BASE} className='btn btn-secondary'>Voltar</Link>
                 <button className='btn btn-primary' disabled={!isValid} type='submit'>Salvar</button>
               </div>
             </form>

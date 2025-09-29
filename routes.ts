@@ -4,7 +4,7 @@ export const ROUTES = {
   USUARIO: {
     BASE: '/usuarios',
     CREATE: '/usuarios/create',
-    VIEW: '/usuarios/view/:id',
+    VIEW: '/usuarios/view/:idUsuario',
     EDIT: '/usuarios/edit/:id'
   },
   PERFIL: '/perfils'
